@@ -149,7 +149,6 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
             blockElements = [contenteditable];
         }
         for (var i = 0; i < blockElements.length; i++) {
-            if(['TD', 'TH'].includes(blockElements[i].nodeName)) {continue;}
             documentModified = this.unwrapAutoStyleSpans(blockElements[i]) || documentModified;
             documentModified = this.performStylingWithinElement(blockElements[i]) || documentModified;
         }
