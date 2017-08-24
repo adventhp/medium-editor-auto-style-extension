@@ -81,7 +81,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
     init: function() {
         MediumEditor.Extension.prototype.init.apply(this, arguments);
         if (this.disableEventHandling === undefined) {
-            this.disableEventHandling = false;
+            this.disableEventHandling = true;
         }
 
         this.processConfig();
@@ -149,7 +149,6 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
             blockElements = [contenteditable];
         }
         for (var i = 0; i < blockElements.length; i++) {
-            if(['LI', 'TD', 'TH'].includes(blockElements[i].nodeName)) {continue;}
             documentModified = this.unwrapAutoStyleSpans(blockElements[i]) || documentModified;
             documentModified = this.performStylingWithinElement(blockElements[i]) || documentModified;
         }

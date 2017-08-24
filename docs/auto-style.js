@@ -4524,7 +4524,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
     init: function() {
         MediumEditor.Extension.prototype.init.apply(this, arguments);
         if (this.disableEventHandling === undefined) {
-            this.disableEventHandling = false;
+            this.disableEventHandling = true;
         }
 
         this.processConfig();
