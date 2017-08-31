@@ -70,9 +70,9 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
             // typed word, the cursor jumps to the beginning of the word
             // (position = 0). Instead cursor position should be after the
             // word.
-            //var sel = this.base.exportSelection();
+            var sel = this.base.exportSelection();
             var res = this.performStyling(el);
-            //this.base.importSelection(sel, true);
+            this.base.importSelection(sel, true);
 
         }, this);
     },
