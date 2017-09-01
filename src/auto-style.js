@@ -201,7 +201,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
 
     findStyleableText: function(contenteditable) {
         this.hashArr = [];
-        var textContent = contenteditable.textContent.trim(),
+        var textContent = contenteditable.textContent,
             match = null,
             matches = [];
 
