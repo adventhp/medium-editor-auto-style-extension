@@ -72,8 +72,9 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
             // word.
             var sel = this.base.exportSelection();
             var res = this.performStyling(el);
-            this.base.importSelection(sel, true);
-
+            if (sel && !sel.emptyBlocksIndex) {
+             this.base.importSelection(sel, true);
+            }
         }, this);
     },
     disableEventHandling: undefined,
