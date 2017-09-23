@@ -72,8 +72,25 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
             // word.
             var sel = this.base.exportSelection();
             var res = this.performStyling(el);
-            if (sel && !sel.emptyBlocksIndex) {
-             this.base.importSelection(sel, true);
+            var doc = this.base.options.contentWindow;
+            var parent = this.base.getFocusedElement();
+            var selection = doc.getSelection();
+            var range = selection.getRangeAt(0);
+            if(sel && !sel.emptyBlocksIndex && range && range.endContainer && range.endContainer.children) {
+                var children = range.endContainer.children;
+                var childNodes = [];
+                for (var i = 0; i < children.length; i++) {
+                    childNodes.push(children[i].nodeName.toLowerCase())
+                }
+                var lastChild = children[children.length - 1];
+                if (lastChild && lastChild.nodeName.toLowerCase() === 'br' && childNodes.filter(node => node === 'br').length > 1) {
+                    return;
+                } else if (range.endContainer === parent.lastChild && range.endContainer.textContent.length === 0) {
+                    return;
+                }
+                this.base.importSelection(sel, true);
+            } else if (sel && sel.end === el.textContent.length) {
+                this.base.importSelection(sel, true);
             }
         }, this);
     },
