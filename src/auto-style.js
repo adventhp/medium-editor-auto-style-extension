@@ -83,7 +83,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
                     childNodes.push(children[i].nodeName.toLowerCase())
                 }
                 var lastChild = children[children.length - 1];
-                if (lastChild && lastChild.nodeName.toLowerCase() === 'br' && childNodes.filter(node => node === 'br').length > 1) {
+                if (lastChild && lastChild.nodeName.toLowerCase() === 'br' && childNodes.filter(function(node) { return node === 'br' }).length > 1) {
                     return;
                 } else if (range.endContainer === parent.lastChild && range.endContainer.textContent.length === 0) {
                     return;
