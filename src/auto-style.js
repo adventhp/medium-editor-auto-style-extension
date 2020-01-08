@@ -76,31 +76,28 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
       var doc = this.base.options.contentWindow;
       var parent = this.base.getFocusedElement();
       var selection = doc.getSelection();
-      var range = selection.getRangeAt(0);
-      if (
-        range &&
-        range.startContainer &&
-        range.startContainer.nodeName.toLowerCase() === "tr"
-      ) {
-        return false; // disable on tr elements
-      }
-      if (
-        sel &&
-        !sel.emptyBlocksIndex &&
-        range &&
-        range.endContainer &&
-        range.endContainer.children
-      ) {
-        var children = range.endContainer.children;
-        var childNodes = [];
-        for (var i = 0; i < children.length; i++) {
-          childNodes.push(children[i].nodeName.toLowerCase());
+      if (selection && selection.rangeCount > 0) {
+        var range = selection.getRangeAt(0);
+        if (
+          range &&
+          range.startContainer &&
+          range.startContainer.nodeName.toLowerCase() === "tr"
+        ) {
+          return false; // disable on tr elements
         }
+      } else {
+        setTimeout(() => this.applyStyles(), 200);
+      }
+      if (sel && !sel.emptyBlocksIndex && range && range.endContainer) {
+        var children =
+          range.endContainer && range.endContainer.wholeText
+            ? range.endContainer.wholeText.toLowerCase().split(" ")
+            : [];
         var lastChild = children[children.length - 1];
         if (
           lastChild &&
-          lastChild.nodeName.toLowerCase() === "br" &&
-          childNodes.filter(function(node) {
+          lastChild.toLowerCase() === "br" &&
+          children.filter(function(node) {
             return node === "br";
           }).length > 1
         ) {
