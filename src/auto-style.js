@@ -89,7 +89,10 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
         setTimeout(() => this.applyStyles(), 200);
       }
       if (sel && !sel.emptyBlocksIndex && range && range.endContainer) {
-        var children = range.endContainer.wholeText.toLowerCase().split(" ");
+        var children =
+          range.endContainer && range.endContainer.wholeText
+            ? range.endContainer.wholeText.toLowerCase().split(" ")
+            : [];
         var lastChild = children[children.length - 1];
         if (
           lastChild &&
