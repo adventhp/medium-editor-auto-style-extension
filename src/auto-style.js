@@ -108,10 +108,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
         ) {
           return;
         }
-        this.base.importSelection(sel, true);
-      } else if (sel && sel.end === el.textContent.length) {
-        this.base.importSelection(sel, true);
-      }
+      } 
     }, this);
   },
   disableEventHandling: undefined,
@@ -158,7 +155,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
             if (this.performStyling(keyPressEvent.target)) {
               // pass true for favorLaterSelectionAnchor - this is needed for links at the end of a
               // paragraph in MS IE, or MS IE causes the link to be deleted right after adding it.
-              this.base.importSelection(sel, true);
+              // this.base.importSelection(sel, true);
             }
           } catch (e) {
             if (window.console) {
