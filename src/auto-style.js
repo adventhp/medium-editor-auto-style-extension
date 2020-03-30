@@ -1,4 +1,4 @@
-var XRegExp = require("xregexp");
+var XRegExp = require('xregexp');
 
 var AutoStyleExtension = MediumEditor.Extension.extend({
   // This config is here for documentary reasons.
@@ -7,26 +7,26 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
     sectionA: {
       matchcase: false,
       wordsonly: false,
-      class: "red-border",
-      words: ["yellöw"]
+      class: 'red-border',
+      words: ['yellöw']
     },
     sectionB: {
       matchcase: true,
       wordsonly: true,
-      style: "color:green;background-color:red;",
-      words: ["RED"]
+      style: 'color:green;background-color:red;',
+      words: ['RED']
     },
     sectionC: {
       matchcase: false,
       wordsonly: false,
-      style: "background-color:gray;",
-      words: ["gray", "grey"]
+      style: 'background-color:gray;',
+      words: ['gray', 'grey']
     },
     sectionD: {
       matchcase: true,
       wordsonly: true,
-      style: "background-color:orange;",
-      words: ["oraNGE"]
+      style: 'background-color:orange;',
+      words: ['oraNGE']
     }
   },
   setConfig: function(config) {
@@ -50,17 +50,17 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
     for (var k = 0; k < sectionKeys.length; k++) {
       var sectionKey = sectionKeys[k];
       var section = this.config[sectionKey];
-      var matchcase = section.matchcase === true ? "g" : "gi";
+      var matchcase = section.matchcase === true ? 'g' : 'gi';
       var wordsonly =
-        section.wordsonly === true ? ["(^|\\PL)", "(\\PL|$)"] : ["", ""];
+        section.wordsonly === true ? ['(^|\\PL)', '(\\PL|$)'] : ['', ''];
       var words =
-        wordsonly[0] + "(" + section.words.join("|") + ")" + wordsonly[1];
+        wordsonly[0] + '(' + section.words.join('|') + ')' + wordsonly[1];
 
       this.regexColors.push({
         style: section.style,
         clazz: section.class,
         regex: new XRegExp(words, matchcase),
-        regexPlain: section.words.join("|")
+        regexPlain: section.words.join('|')
       });
     }
   },
@@ -81,7 +81,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
         if (
           range &&
           range.startContainer &&
-          range.startContainer.nodeName.toLowerCase() === "tr"
+          range.startContainer.nodeName.toLowerCase() === 'tr'
         ) {
           return false; // disable on tr elements
         }
@@ -91,14 +91,14 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
       if (sel && !sel.emptyBlocksIndex && range && range.endContainer) {
         var children =
           range.endContainer && range.endContainer.wholeText
-            ? range.endContainer.wholeText.toLowerCase().split(" ")
+            ? range.endContainer.wholeText.toLowerCase().split(' ')
             : [];
         var lastChild = children[children.length - 1];
         if (
           lastChild &&
-          lastChild.toLowerCase() === "br" &&
+          lastChild.toLowerCase() === 'br' &&
           children.filter(function(node) {
-            return node === "br";
+            return node === 'br';
           }).length > 1
         ) {
           return;
@@ -108,7 +108,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
         ) {
           return;
         }
-      } 
+      }
     }, this);
   },
   disableEventHandling: undefined,
@@ -122,8 +122,8 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
     this.processConfig();
     this.applyStyles();
 
-    this.subscribe("editableKeypress", this.onKeypress.bind(this));
-    this.subscribe("editableBlur", this.onBlur.bind(this));
+    this.subscribe('editableKeypress', this.onKeypress.bind(this));
+    this.subscribe('editableBlur', this.onBlur.bind(this));
   },
 
   onBlur: function(blurEvent, editable) {
@@ -134,10 +134,6 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
   },
 
   onKeypress: function(keyPressEvent) {
-    if (this.disableEventHandling) {
-      return;
-    }
-
     if (
       MediumEditor.util.isKey(keyPressEvent, [
         MediumEditor.util.keyCode.TAB,
@@ -151,15 +147,15 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
       this.performStylingTimeout = setTimeout(
         function() {
           try {
-            var sel = this.base.exportSelection();
+            var sel = this.base.saveSelection();
             if (this.performStyling(keyPressEvent.target)) {
               // pass true for favorLaterSelectionAnchor - this is needed for links at the end of a
               // paragraph in MS IE, or MS IE causes the link to be deleted right after adding it.
-              // this.base.importSelection(sel, true);
+              this.base.restoreSelection();
             }
           } catch (e) {
             if (window.console) {
-              window.console.error("Failed to perform styling", e);
+              window.console.error('Failed to perform styling', e);
             }
             this.disableEventHandling = true;
           }
@@ -273,9 +269,9 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
           if (match.length === 2) {
             // wordsonly: false
             // HACK!
-            if (match[0] === "") continue;
+            if (match[0] === '') continue;
             var matchEnd = match.index + match[0].length;
-            var hash = match.index + "-" + matchEnd;
+            var hash = match.index + '-' + matchEnd;
             if (this.checkHash(hash)) {
               matches.push({
                 word: match[0],
@@ -288,10 +284,10 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
           } else if (match.length === 4) {
             // wordsonly: true
             // HACK!
-            if (match[2] === "") continue;
+            if (match[2] === '') continue;
             var start = match.index + match[1].length;
             var matchEnd = start + match[2].length;
-            var hash = start + "-" + matchEnd;
+            var hash = start + '-' + matchEnd;
             if (this.checkHash(hash)) {
               matches.push({
                 word: match[2],
@@ -303,7 +299,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
             }
           } else {
             if (window.console) {
-              window.console.error("Cannot process: " + match);
+              window.console.error('Cannot process: ' + match);
             }
           }
         }
@@ -317,9 +313,9 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
     var node = MediumEditor.util.traverseUp(textNodes[0], function(node) {
       var ret;
       if (
-        node.nodeName.toLowerCase() === "span" &&
+        node.nodeName.toLowerCase() === 'span' &&
         node.getAttribute &&
-        node.getAttribute("data-auto-style") === "true"
+        node.getAttribute('data-auto-style') === 'true'
       ) {
         ret = node;
       }
@@ -328,31 +324,31 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
 
     if (node !== false) {
       if (style !== undefined) {
-        if (node.getAttribute("style") === null) {
-          node.setAttribute("style", style);
+        if (node.getAttribute('style') === null) {
+          node.setAttribute('style', style);
         } else {
-          var s = node.getAttribute("style");
-          node.setAttribute("style", style + ";" + s);
+          var s = node.getAttribute('style');
+          node.setAttribute('style', style + ';' + s);
         }
       }
       if (clazz !== undefined) {
-        node.className += " " + clazz;
+        node.className += ' ' + clazz;
       }
-      node.setAttribute("data-auto-style", "true");
+      node.setAttribute('data-auto-style', 'true');
     } else {
-      node = this.document.createElement("span");
+      node = this.document.createElement('span');
       MediumEditor.util.moveTextRangeIntoElement(
         textNodes[0],
         textNodes[textNodes.length - 1],
         node
       );
       if (style !== undefined) {
-        node.setAttribute("style", style);
+        node.setAttribute('style', style);
       }
       if (clazz !== undefined) {
         node.className += clazz;
       }
-      node.setAttribute("data-auto-style", "true");
+      node.setAttribute('data-auto-style', 'true');
     }
   }
 });
