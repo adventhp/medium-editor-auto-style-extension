@@ -107,7 +107,10 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
           range.endContainer.textContent.length === 0
         ) {
           return;
-        }
+        } 
+        this.base.importSelection(sel, true);
+      } else if (sel && sel.end === el.textContent.length) {
+        this.base.importSelection(sel, true);  
       }
     }, this);
   },
@@ -138,8 +141,7 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
       MediumEditor.util.isKey(keyPressEvent, [
         MediumEditor.util.keyCode.TAB,
         MediumEditor.util.keyCode.DELETE,
-        MediumEditor.util.keyCode.SPACE,
-        MediumEditor.util.keyCode.ENTER
+        MediumEditor.util.keyCode.SPACE
       ])
     ) {
       clearTimeout(this.performStylingTimeout);
@@ -147,11 +149,11 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
       this.performStylingTimeout = setTimeout(
         function() {
           try {
-            var sel = this.base.saveSelection();
+            var sel = this.base.exportSelection();
             if (this.performStyling(keyPressEvent.target)) {
               // pass true for favorLaterSelectionAnchor - this is needed for links at the end of a
               // paragraph in MS IE, or MS IE causes the link to be deleted right after adding it.
-              this.base.restoreSelection();
+             this.base.importSelection(sel, true);  
             }
           } catch (e) {
             if (window.console) {
