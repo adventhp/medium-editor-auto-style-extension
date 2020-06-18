@@ -108,7 +108,10 @@ var AutoStyleExtension = MediumEditor.Extension.extend({
         ) {
           return;
         } 
-      } 
+        this.base.importSelection(sel, true);
+       } else if (sel && sel.end === el.textContent.length) {
+        this.base.importSelection(sel, true);
+      }
     }, this);
   },
   disableEventHandling: undefined,
